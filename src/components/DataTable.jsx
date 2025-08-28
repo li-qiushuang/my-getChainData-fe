@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useAccount, useSendTransaction } from 'wagmi';
+import { useAccount } from 'wagmi';
 import './../../App.css'
 
 
 export const DataTable = () => {
   const { address, isConnected } = useAccount();
-  const [account, setAccount] = useState('');
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +29,7 @@ export const DataTable = () => {
       }
 
       const data = await response.json();
+      console.log('data---', data)
 
       if (data.status === '1') {
         console.log(data.result)
@@ -121,7 +121,7 @@ export const DataTable = () => {
                 {transactions.length === 0 ? (
                   <tr>
                     <td>
-                      {account ? '暂无交易记录' : '请先连接钱包'}
+                      {address ? '暂无交易记录' : '请先连接钱包'}
                     </td>
                   </tr>
                 ) : (
@@ -139,7 +139,7 @@ export const DataTable = () => {
                       <td> <span> {formatAddress(tx.to)} </span> </td>
                       <td> {formatEther(tx.value)} </td>
                       <td> {((parseInt(tx.gas) * parseInt(tx.gasPrice)) / Math.pow(10, 18)).toFixed(6)} </td>
-                      <td> <span> {tx.from.toLowerCase() === account.toLowerCase() ? '发送' : '接收'} </span></td>
+                      <td> <span> {tx.from.toLowerCase() === address.toLowerCase() ? '发送' : '接收'} </span></td>
                     </tr>
                   ))
                 )}
